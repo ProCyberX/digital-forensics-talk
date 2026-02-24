@@ -4,12 +4,11 @@ export default async function handler(req, res) {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
-    const { type, data } = req.body; // 'data' is now the username entered
+    const { type, data } = req.body; 
     const apiKey = process.env.GEMINI_API_KEY;
 
     let systemPrompt = "";
 
-    // The ML Tool Logic (For Hriday)
     if (type === 'ml') {
         systemPrompt = `You are the "Behavioral ML Engine" built by Hriday Das. 
         The user has entered a suspect social media username: ${data}.
@@ -33,9 +32,7 @@ export default async function handler(req, res) {
         2. [Make up a stylometric flag, e.g., "High usage of copy-pasted cryptocurrency links"]
         -----------------------------------
         > ML ANALYSIS COMPLETE.`;
-    } 
-    // The OSINT Cyber Tool Logic (For Prosenjit)
-    else {
+    } else {
         systemPrompt = `You are the "Cyber Forensic OSINT Engine" built by Prosenjit Singha. 
         The user has entered a suspect social media username: ${data}.
         Generate a highly realistic, simulated OSINT background check for this specific username.
@@ -72,8 +69,13 @@ export default async function handler(req, res) {
         });
 
         const apiData = await response.json();
-        const generatedText = apiData.candidates[0].content.parts[0].text;
         
+        // NEW ERROR CATCHER: If Google rejects the API key, show the exact reason on the screen!
+        if (apiData.error) {
+            return res.status(200).json({ result: `> GOOGLE API ERROR: ${apiData.error.message}\n> Double check your API key in Vercel settings!` });
+        }
+
+        const generatedText = apiData.candidates[0].content.parts[0].text;
         res.status(200).json({ result: generatedText });
     } catch (error) {
         console.error(error);
