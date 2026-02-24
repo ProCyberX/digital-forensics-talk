@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Identity Forensics | Tech Talk</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=JetBrains+Mono&display=swap');
+        
+        body { 
+            background: linear-gradient(rgba(5,5,5,0.88), rgba(5,5,5,0.95)), url('campus-building.webp') center/cover fixed; 
+            color: #e2e8f0; 
+            font-family: 'Space Grotesk', sans-serif; 
+            overflow-x: hidden; 
+        }
+        
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        
+        .slide { 
+            min-height: 100vh; 
+            width: 100vw; 
+            scroll-snap-align: start; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            position: relative; 
+            border-bottom: 1px solid rgba(30, 41, 59, 0.5); 
+            overflow-y: auto; 
+            overflow-x: hidden;
+        }
+        
+        .glow-text { text-shadow: 0 0 25px rgba(56, 189, 248, 0.6); }
+        .tech-card { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(56, 189, 248, 0.2); transition: all 0.3s ease; }
+        .tech-card:hover { border-color: #38bdf8; transform: translateY(-5px); box-shadow: 0 10px 30px rgba(56, 189, 248, 0.15); }
+        .scroll-container { height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; overflow-x: hidden; }
+        .terminal { background: rgba(10, 10, 10, 0.85); backdrop-filter: blur(12px); border: 1px solid #333; border-radius: 8px; box-shadow: inset 0 0 20px rgba(0,0,0,0.5); width: 100%; }
+        .terminal-header { background: rgba(26, 26, 26, 0.9); padding: 8px; border-bottom: 1px solid #333; display: flex; gap: 6px; }
+        .mac-btn { width: 12px; height: 12px; border-radius: 50%; }
+        .mac-close { background: #ff5f56; } .mac-min { background: #ffbd2e; } .mac-max { background: #27c93f; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(5,5,5,0.5); }
+        ::-webkit-scrollbar-thumb { background: #38bdf8; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="hidden md:flex fixed right-6 top-1/2 transform -translate-y-1/2 z-50 flex-col gap-3" id="navDots"></div>
+
+<div class="scroll-container" id="scrollContainer">
+    
+    <section class="slide p-6 md:p-16" id="slide0">
+        <div class="absolute top-4 left-4 md:top-8 md:left-8 flex items-center gap-3 md:gap-4 z-20">
+            <img src="ICFAI_University_Tripura logo.png" alt="ICFAI Logo" class="w-10 h-10 md:w-16 md:h-16">
+            <h2 class="mono text-white text-xs md:text-lg tracking-widest uppercase">The ICFAI University Tripura</h2>
+        </div>
+        <div class="text-center z-10 mt-12 md:mt-0">
+            <h2 class="mono text-sky-400 mb-2 md:mb-4 tracking-[0.1em] md:tracking-[0.2em] uppercase text-xs md:text-sm">CSE Tech Talk Series</h2>
+            <h1 class="text-4xl md:text-7xl font-bold mb-4 glow-text leading-tight">Digital <br class="md:hidden"><span class="text-sky-400">Identity Forensics</span></h1>
+            <p class="text-lg md:text-2xl text-slate-400 max-w-3xl mx-auto mb-8 md:mb-10 px-4">How we use AI and Cyber tools to hunt down fake social media accounts.</p>
+            <div class="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12 text-base md:text-lg">
+                <div class="text-center md:text-left">
+                    <p class="text-slate-500 text-xs md:text-sm mono mb-1">Presented By</p>
+                    <p class="font-bold text-lg md:text-xl">Hriday Das <span class="text-purple-400 text-xs md:text-sm block md:inline">(AI & Machine Learning)</span></p>
+                    <p class="font-bold text-lg md:text-xl mt-2 md:mt-0">Prosenjit Singha <span class="text-sky-500 text-xs md:text-sm block md:inline">(Cybersecurity)</span></p>
+                </div>
+                <div class="hidden md:block h-12 w-px bg-slate-700"></div>
+                <div class="w-24 h-px bg-slate-700 md:hidden"></div>
+                <div class="text-center md:text-left mono text-slate-400 text-sm md:text-base">
+                    <p>DATE: 25-02-2026</p>
+                    <p class="text-green-400 mt-1">STATUS: READY</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide p-6 md:p-16" id="slide1">
+        <div class="w-full max-w-5xl">
+            <h2 class="text-xs md:text-sm mono text-purple-400 mb-2">// 01: MACHINE LEARNING</h2>
+            <h3 class="text-3xl md:text-5xl font-bold mb-6 md:mb-8">The Problem with <span class="text-purple-400">Basic Security</span></h3>
+            <div class="tech-card p-6 md:p-8 rounded-2xl border-l-4 border-purple-500">
+                <ul class="space-y-4 md:space-y-6 text-base md:text-xl text-slate-300">
+                    <li class="flex items-start"><i class="fa-solid fa-times-circle text-red-400 mt-1 mr-3 md:mr-4"></i> <span><strong>The Old Way:</strong> Platforms used to block accounts just for posting too fast or having no profile picture.</span></li>
+                    <li class="flex items-start"><i class="fa-solid fa-user-secret text-purple-400 mt-1 mr-3 md:mr-4"></i> <span><strong>The New Threat:</strong> Scammers now use AI to act exactly like real humans. Basic filters don't work anymore.</span></li>
+                    <li class="flex items-start"><i class="fa-solid fa-brain text-purple-400 mt-1 mr-3 md:mr-4"></i> <span><strong>Our Solution (ML):</strong> We train AI to look at <em>how</em> an account behaves, not just what it looks like.</span></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide p-6 md:p-16" id="slide2">
+        <div class="w-full max-w-5xl">
+            <h2 class="text-xs md:text-sm mono text-purple-400 mb-2">// 02: MACHINE LEARNING</h2>
+            <h3 class="text-3xl md:text-5xl font-bold mb-6 md:mb-8">Spotting the <span class="text-purple-400">Robotic Routine</span></h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                <div class="tech-card p-6 md:p-8 rounded-2xl">
+                    <h4 class="text-xl md:text-2xl font-bold mb-3 md:mb-4 text-white">Real Humans (Messy)</h4>
+                    <ul class="space-y-2 md:space-y-3 text-sm md:text-base text-slate-400">
+                        <li>• We log in at random times.</li>
+                        <li>• We scroll fast, then slow, and like random posts.</li>
+                        <li>• We make typos when we chat.</li>
+                        <li class="text-purple-300 mt-2"><strong>AI sees this as normal, random behavior.</strong></li>
+                    </ul>
+                </div>
+                <div class="tech-card p-6 md:p-8 rounded-2xl border-t-2 border-red-500">
+                    <h4 class="text-xl md:text-2xl font-bold mb-3 md:mb-4 text-red-400">Fake Accounts (Perfect)</h4>
+                    <ul class="space-y-2 md:space-y-3 text-sm md:text-base text-slate-400">
+                        <li>• They post on exact, scheduled timers.</li>
+                        <li>• They only interact with specific target accounts.</li>
+                        <li>• They copy-paste the exact same comments.</li>
+                        <li class="text-red-300 mt-2"><strong>AI flags this as suspiciously "perfect".</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide p-6 md:p-16" id="slide3">
+        <div class="w-full max-w-5xl">
+            <h2 class="text-xs md:text-sm mono text-purple-400 mb-2">// 03: MACHINE LEARNING</h2>
+            <h3 class="text-3xl md:text-5xl font-bold mb-6 md:mb-8"><span class="text-purple-400">Face Matching</span> AI</h3>
+            <div class="tech-card p-6 md:p-8 rounded-2xl flex flex-col-reverse md:flex-row items-center gap-6 md:gap-8">
+                <div class="w-full md:w-2/3">
+                    <ul class="space-y-4 md:space-y-5 text-base md:text-lg text-slate-300">
+                        <li><strong>How it works:</strong> We use AI models that don't just "see" a face, they measure the exact distance between eyes, nose, and jaw.</li>
+                        <li><strong>The Search:</strong> It compares a suspect's profile picture against millions of real photos online in seconds.</li>
+                        <li class="bg-black/40 p-3 rounded-lg border border-purple-900/50"><strong>The Catch:</strong> If an account is 2 weeks old, but has a 99% face match to a famous CEO... it's a confirmed clone.</li>
+                    </ul>
+                </div>
+                <div class="w-full md:w-1/3 flex justify-center text-purple-500 mb-4 md:mb-0">
+                    <i class="fa-solid fa-users-viewfinder text-6xl md:text-9xl drop-shadow-[0_0_15px_rgba(168,85,247,0.5)]"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide p-6 md:p-16" id="slide4">
+        <div class="w-full max-w-5xl">
+            <h2 class="text-xs md:text-sm mono text-purple-400 mb-2">// 04: MACHINE LEARNING</h2>
+            <h3 class="text-3xl md:text-5xl font-bold mb-6 md:mb-8">Catching <span class="text-purple-400">Fake Typing Styles</span></h3>
+            <div class="tech-card p-6 md:p-8 rounded-2xl border-l-4 border-purple-500">
+                <ul class="space-y-4 md:space-y-6 text-base md:text-xl text-slate-300">
+                    <li class="flex items-start"><i class="fa-solid fa-keyboard text-purple-400 mt-1 mr-3 md:mr-4"></i> <span><strong>Sudden Changes:</strong> If a boring, professional account suddenly starts using slang like "Buy Crypto Now!"—the AI knows the account got hacked.</span></li>
+                    <li class="flex items-start"><i class="fa-solid fa-robot text-purple-400 mt-1 mr-3 md:mr-4"></i> <span><strong>Lazy ChatGPT Bots:</strong> We scan posts for obvious AI mistakes, like an account accidentally tweeting "As an AI language model..."</span></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide p-6 md:p-16" id="slide5">
+        <div class="w-full max-w-5xl">
+            <h2 class="text-xs md:text-sm mono text-sky-400 mb-2">// 05: CYBERSECURITY DOMAIN</h2>
+            <h3 class="text-3xl md:text-5xl font-bold mb-6 md:mb-8">Finding <span class="text-sky-400">Hidden Footprints</span></h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                <div class="tech-card p-6 md:p-8 rounded-2xl">
+                    <h4 class="text-xl md:text-2xl font-bold mb-3 md:mb-4 text-sky-300">The Hidden ID Test</h4>
+                    <p class="text-sm md:text-base text-slate-400 mb-4">On X (Twitter), you can change your @name anytime. But your account has a permanent, hidden "ID Number" created the day you joined.</p>
+                    <p class="text-sky-200 text-xs md:text-sm mono bg-black/50 p-3 rounded border border-sky-900">Proof: If the bio says "Joined 2018", but the hidden ID was created in 2026, they are lying.</p>
+                </div>
+                <div class="tech-card p-6 md:p-8 rounded-2xl">
+                    <h4 class="text-xl md:text-2xl font-bold mb-3 md:mb-4 text-sky-300">Stolen Image Quality</h4>
+                    <p class="text-sm md:text-base text-slate-400 mb-4">When scammers download your photo and re-upload it to a fake account, the image loses quality. We can detect this invisible drop.</p>
+                    <p class="text-sky-200 text-xs md:text-sm mono bg-black/50 p-3 rounded border border-sky-900">Proof: Missing camera data + bad image quality = Stolen media.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide p-6 md:p-16" id="slide6">
+        <div class="w-full max-w-5xl">
+            <h2 class="text-xs md:text-sm mono text-sky-400 mb-2">// 06: CYBERSECURITY DOMAIN</h2>
+            <h3 class="text-3xl md:text-5xl font-bold mb-6 md:mb-8">The <span class="text-sky-400">"Mutual Friends"</span> Check</h3>
+            <div class="tech-card p-6 md:p-8 rounded-2xl flex flex-col-reverse md:flex-row items-center gap-6 md:gap-8">
+                <div class="w-full md:w-2/3">
+                    <ul class="space-y-4 md:space-y-5 text-base md:text-lg text-slate-300">
+                        <li><strong>Real Human Networks:</strong> In real life, your friends usually know each other. Your friend list looks like a densely connected web.</li>
+                        <li><strong>Fake Account Networks:</strong> Scammers randomly add random people to look popular. None of those people know each other.</li>
+                        <li class="bg-black/40 p-3 rounded-lg border border-sky-900/50"><strong>The Verdict:</strong> If an account's friend group has zero mutual connections, it's almost certainly a scammer.</li>
+                    </ul>
+                </div>
+                <div class="w-full md:w-1/3 flex justify-center text-sky-500 mb-4 md:mb-0">
+                    <i class="fa-solid fa-project-diagram text-6xl md:text-9xl drop-shadow-[0_0_15px_rgba(56,189,248,0.5)]"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide p-6 md:p-16" id="slide7">
+        <div class="w-full max-w-5xl">
+            <h2 class="text-xs md:text-sm mono text-sky-400 mb-2">// 07: CYBERSECURITY DOMAIN</h2>
+            <h3 class="text-3xl md:text-5xl font-bold mb-6 md:mb-8">Legal Steps to <span class="text-sky-400">Remove Fakes</span></h3>
+            <div class="tech-card p-6 md:p-8 rounded-2xl border-t-4 border-sky-500">
+                <ul class="space-y-4 md:space-y-6 text-base md:text-xl text-slate-300">
+                    <li class="flex items-start"><i class="fa-solid fa-camera text-sky-400 mt-1 mr-3 md:mr-4"></i> <span><strong>Save the Proof:</strong> Before you report, screenshot the fake profile and copy their exact URL link. Sometimes they block you to hide.</span></li>
+                    <li class="flex items-start"><i class="fa-solid fa-scale-balanced text-sky-400 mt-1 mr-3 md:mr-4"></i> <span><strong>Indian IT Act (Section 79):</strong> Platforms are legally required to remove impersonators if you provide proof.</span></li>
+                    <li class="flex items-start"><i class="fa-solid fa-envelope text-sky-400 mt-1 mr-3 md:mr-4"></i> <span><strong>Email Directly:</strong> The basic "Report" button uses slow AI. Email the platform's official "Grievance Officer" directly for fast human review.</span></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide p-6 md:p-16" id="slide8">
+        <div class="w-full max-w-5xl">
+            <h2 class="text-xs md:text-sm mono text-sky-400 mb-2">// 08: LAYPERSON GUIDE</h2>
+            <h3 class="text-3xl md:text-5xl font-bold mb-6 md:mb-8">How <span class="text-sky-400">Anyone</span> Can Fight Back</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                <div class="tech-card p-5 md:p-6 rounded-xl text-center border-b-2 border-sky-500">
+                    <div class="bg-sky-900/50 w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4 text-sky-400 font-bold">1</div>
+                    <h4 class="font-bold text-base md:text-lg mb-2">Identify</h4>
+                    <p class="text-xs md:text-sm text-slate-400">Look closely at the username. Scammers use tricks like replacing a lowercase 'L' with a capital 'I'.</p>
+                </div>
+                <div class="tech-card p-5 md:p-6 rounded-xl text-center border-b-2 border-sky-500">
+                    <div class="bg-sky-900/50 w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4 text-sky-400 font-bold">2</div>
+                    <h4 class="font-bold text-base md:text-lg mb-2">Isolate</h4>
+                    <p class="text-xs md:text-sm text-slate-400">Do NOT message the fake account. Immediately text your mutual friends and warn them not to accept the request.</p>
+                </div>
+                <div class="tech-card p-5 md:p-6 rounded-xl text-center border-b-2 border-sky-500">
+                    <div class="bg-sky-900/50 w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4 text-sky-400 font-bold">3</div>
+                    <h4 class="font-bold text-base md:text-lg mb-2">Escalate</h4>
+                    <p class="text-xs md:text-sm text-slate-400">If they ask for money, report the profile immediately on <strong>cybercrime.gov.in</strong>.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide p-6 md:p-16" id="slide9">
+        <div class="w-full max-w-6xl">
+            <h2 class="text-xs md:text-sm mono text-pink-400 mb-2">// 09: NATIVE TAKEDOWN</h2>
+            <div class="flex items-center gap-3 md:gap-4 mb-6 md:mb-8">
+                <i class="fa-brands fa-instagram text-4xl md:text-5xl text-pink-500"></i>
+                <h3 class="text-3xl md:text-5xl font-bold">Taking Down <span class="text-pink-500">Instagram</span> Fakes</h3>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 items-center">
+                <div class="space-y-4 md:space-y-6">
+                    <div class="tech-card p-5 md:p-6 rounded-xl border-l-4 border-pink-500">
+                        <h4 class="font-bold text-lg md:text-xl mb-2">Step 1: The Right Category</h4>
+                        <p class="text-sm md:text-base text-slate-400">Never just click "Spam." Go to the profile > Three Dots (⋮) > Report > <strong>"Pretending to be someone else"</strong>.</p>
+                    </div>
+                    <div class="tech-card p-5 md:p-6 rounded-xl border-l-4 border-pink-500">
+                        <h4 class="font-bold text-lg md:text-xl mb-2">Step 2: The ID Selfie</h4>
+                        <p class="text-sm md:text-base text-slate-400">If the scammer blocked you, you can't report from your app. Google <em>"Instagram Impersonation Form"</em> and submit a selfie holding your Aadhar card. A real human will review it and delete the fake.</p>
+                    </div>
+                </div>
+                <div class="bg-black/60 border border-slate-700 rounded-2xl p-6 flex flex-col justify-center items-center h-full text-center">
+                    <i class="fa-solid fa-id-card text-5xl text-pink-500/50 mb-4"></i>
+                    <p class="text-slate-300 text-sm mono">Government ID verification bypasses the basic AI and forces a human employee to look at your case.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide p-6 md:p-16" id="slide10">
+        <div class="w-full max-w-6xl">
+            <h2 class="text-xs md:text-sm mono text-blue-400 mb-2">// 10: NATIVE TAKEDOWN</h2>
+            <div class="flex items-center gap-3 md:gap-4 mb-6 md:mb-8">
+                <i class="fa-brands fa-facebook text-4xl md:text-5xl text-blue-500"></i>
+                <h3 class="text-3xl md:text-5xl font-bold">Taking Down <span class="text-blue-500">Facebook</span> Fakes</h3>
+            </div>
+            <div class="flex flex-col-reverse md:grid md:grid-cols-2 gap-6 md:gap-12 items-center">
+                <div class="bg-black/60 border border-slate-700 rounded-2xl p-6 flex flex-col justify-center items-center h-full w-full text-center">
+                    <i class="fa-solid fa-users text-5xl text-blue-500/50 mb-4"></i>
+                    <p class="text-slate-300 text-sm mono">Facebook's security system reacts to numbers. More reports = Faster deletion.</p>
+                </div>
+                <div class="space-y-4 md:space-y-6 w-full">
+                    <div class="tech-card p-5 md:p-6 rounded-xl md:border-r-4 border-l-4 md:border-l-0 border-blue-500 md:text-right text-left">
+                        <h4 class="font-bold text-lg md:text-xl mb-2">Mass Reporting</h4>
+                        <p class="text-sm md:text-base text-slate-400">Tell at least 5 friends to report the profile at the exact same time. Choose <strong>"Pretending to be a friend"</strong>.</p>
+                    </div>
+                    <div class="tech-card p-5 md:p-6 rounded-xl md:border-r-4 border-l-4 md:border-l-0 border-blue-500 md:text-right text-left">
+                        <h4 class="font-bold text-lg md:text-xl mb-2">Report the Messages</h4>
+                        <p class="text-sm md:text-base text-slate-400">If the fake is asking for money in Messenger, report the <em>chat messages</em> directly as a Scam. Financial scam reports get handled the fastest.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide p-6 md:p-16" id="slide11">
+        <div class="w-full max-w-6xl">
+            <h2 class="text-xs md:text-sm mono text-slate-300 mb-2">// 11: NATIVE TAKEDOWN</h2>
+            <div class="flex items-center gap-3 md:gap-4 mb-6 md:mb-8">
+                <i class="fa-brands fa-x-twitter text-4xl md:text-5xl text-white"></i>
+                <h3 class="text-3xl md:text-5xl font-bold">Taking Down <span class="text-slate-400">X (Twitter)</span> Fakes</h3>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 items-center">
+                <div class="space-y-4 md:space-y-6">
+                    <div class="tech-card p-5 md:p-6 rounded-xl border-l-4 border-slate-300">
+                        <h4 class="font-bold text-lg md:text-xl mb-2">Is it a Parody?</h4>
+                        <p class="text-sm md:text-base text-slate-400">X allows joke accounts. To get them banned, you must prove they are pretending to be you to trick people, not just making a joke.</p>
+                    </div>
+                    <div class="tech-card p-5 md:p-6 rounded-xl border-l-4 border-slate-300">
+                        <h4 class="font-bold text-lg md:text-xl mb-2">The Copyright Takedown</h4>
+                        <p class="text-sm md:text-base text-slate-400">If the scammer uses your personal photo as their profile picture, report it as a <strong>Copyright Violation (DMCA)</strong> instead of impersonation. It works much faster.</p>
+                    </div>
+                </div>
+                <div class="bg-black/60 border border-slate-700 rounded-2xl p-6 flex flex-col justify-center items-center h-full text-center">
+                    <i class="fa-solid fa-copyright text-5xl text-slate-300/50 mb-4"></i>
+                    <p class="text-slate-300 text-sm mono">Using copyright laws forces platforms to remove stolen images legally within hours.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide p-6 md:p-16" id="slide12">
+        <div class="w-full max-w-7xl">
+            <div class="text-center mb-6 md:mb-8 mt-12 md:mt-0">
+                <h3 class="text-3xl md:text-5xl font-bold mb-2">Live <span class="text-white">Forensic</span> Tools</h3>
+                <p class="text-slate-400 mono text-xs md:text-sm">v1.0 • Enter a username to run a live scan</p>
+            </div>
+            
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 md:gap-8 pb-12 md:pb-0">
+                
+                <div class="terminal w-full border-purple-900/50 border flex flex-col">
+                    <div class="terminal-header bg-purple-900/30">
+                        <div class="mac-btn mac-close"></div><div class="mac-btn mac-min"></div><div class="mac-btn mac-max"></div>
+                        <span class="mono text-[10px] md:text-xs text-purple-400 ml-2 md:ml-4">root@ml-engine:~ # analyze_username</span>
+                    </div>
+                    <div class="p-4 md:p-6 flex-grow flex flex-col">
+                        <div class="flex items-center bg-black/60 border border-purple-900/50 rounded mb-4 shadow-inner px-3">
+                            <span class="text-purple-500 font-bold mr-2">@</span>
+                            <input type="text" id="mlInput" class="w-full h-12 bg-transparent text-purple-300 mono text-sm focus:outline-none" placeholder="Enter suspect username (e.g., crypto_king_99)">
+                        </div>
+                        <button onclick="runTool('ml')" id="mlBtn" class="w-full bg-purple-900/60 hover:bg-purple-700 text-purple-100 border border-purple-600 py-3 rounded mono transition-all font-bold text-xs md:text-sm tracking-wider">
+                            [ SCAN USERNAME BEHAVIOR ]
+                        </button>
+                        <div id="mlOutput" class="hidden mt-4 bg-[#0a0a0a] p-4 rounded border border-purple-900/50 h-56 overflow-y-auto mono text-xs md:text-sm text-purple-300 whitespace-pre-wrap leading-relaxed"></div>
+                    </div>
+                </div>
+
+                <div class="terminal w-full border-sky-900/50 border flex flex-col">
+                    <div class="terminal-header bg-sky-900/30">
+                        <div class="mac-btn mac-close"></div><div class="mac-btn mac-min"></div><div class="mac-btn mac-max"></div>
+                        <span class="mono text-[10px] md:text-xs text-sky-400 ml-2 md:ml-4">root@cyber-forensics:~ # run_osint_scan</span>
+                    </div>
+                    <div class="p-4 md:p-6 flex-grow flex flex-col">
+                        <div class="flex items-center bg-black/60 border border-sky-900/50 rounded mb-4 shadow-inner px-3">
+                            <span class="text-sky-500 font-bold mr-2">@</span>
+                            <input type="text" id="cyberInput" class="w-full h-12 bg-transparent text-sky-300 mono text-sm focus:outline-none" placeholder="Enter suspect username (e.g., real_support_desk)">
+                        </div>
+                        <button onclick="runTool('cyber')" id="cyberBtn" class="w-full bg-sky-900/60 hover:bg-sky-700 text-sky-100 border border-sky-600 py-3 rounded mono transition-all font-bold text-xs md:text-sm tracking-wider">
+                            [ RUN OSINT ON USERNAME ]
+                        </button>
+                        <div id="cyberOutput" class="hidden mt-4 bg-[#0a0a0a] p-4 rounded border border-sky-900/50 h-56 overflow-y-auto mono text-xs md:text-sm text-sky-300 whitespace-pre-wrap leading-relaxed"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+<script>
+    // Dynamic Navigation Dots
+    const sections = document.querySelectorAll('.slide');
+    const dotsContainer = document.getElementById('navDots');
+    
+    sections.forEach((_, i) => {
+        const dot = document.createElement('div');
+        dot.className = `w-3 h-3 rounded-full cursor-pointer transition-all ${i===0 ? 'bg-sky-400 scale-125 shadow-[0_0_10px_#38bdf8]' : 'bg-slate-700 hover:bg-slate-500'}`;
+        dot.onclick = () => document.getElementById(`slide${i}`).scrollIntoView({ behavior: 'smooth' });
+        dotsContainer.appendChild(dot);
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if(entry.isIntersecting) {
+                const id = parseInt(entry.target.id.replace('slide', ''));
+                document.querySelectorAll('#navDots div').forEach((d, i) => {
+                    d.className = i === id ? 'w-3 h-3 rounded-full cursor-pointer transition-all bg-sky-400 scale-125 shadow-[0_0_10px_#38bdf8]' : 'w-3 h-3 rounded-full cursor-pointer transition-all bg-slate-700 hover:bg-slate-500';
+                });
+            }
+        });
+    }, { threshold: 0.5 });
+    
+    sections.forEach(s => observer.observe(s));
+
+    // Dual API Tool Logic
+    async function runTool(type) {
+        const inputStr = document.getElementById(`${type}Input`).value;
+        const btn = document.getElementById(`${type}Btn`);
+        const outputBox = document.getElementById(`${type}Output`);
+
+        if(!inputStr.trim()) return;
+
+        btn.disabled = true;
+        btn.innerText = "[ PROCESSING... ]";
+        outputBox.classList.remove('hidden');
+        outputBox.innerText = "> Connecting to database...\n> Scanning details...\n> Wait for results...";
+
+        try {
+            const res = await fetch('/api/analyze', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ type: type, data: inputStr })
+            });
+            
+            if(!res.ok) throw new Error('API Error');
+            const resultData = await res.json();
+            
+            outputBox.innerText = resultData.result;
+        } catch(err) {
+            outputBox.innerText = "> ERROR: Could not connect. Check internet or API key.";
+        } finally {
+            btn.disabled = false;
+            btn.innerText = type === 'ml' ? "[ SCAN ACCOUNT BEHAVIOR ]" : "[ FIND HIDDEN DATA ]";
+        }
+    }
+</script>
+</body>
+</html>
