@@ -1,14 +1,16 @@
 // api/analyze.js
 export default async function handler(req, res) {
+    // Only allow POST requests from your website
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
     const { type, data } = req.body; 
-    const apiKey = process.env.GROQ_API_KEY;
+    const apiKey = process.env.GROQ_API_KEY; // Make sure this matches your Vercel Environment Variable name!
 
     let systemPrompt = "";
 
+    // The ML Tool Logic (For Hriday)
     if (type === 'ml') {
         systemPrompt = `You are the "Behavioral ML Engine" built by Hriday Das. 
         The user has entered a suspect social media username: ${data}.
@@ -32,7 +34,9 @@ export default async function handler(req, res) {
         2. [Make up a stylometric flag, e.g., "High usage of copy-pasted cryptocurrency links"]
         -----------------------------------
         > ML ANALYSIS COMPLETE.`;
-    } else {
+    } 
+    // The OSINT Tool Logic (For Prosenjit)
+    else {
         systemPrompt = `You are the "Cyber Forensic OSINT Engine" built by Prosenjit Singha. 
         The user has entered a suspect social media username: ${data}.
         Generate a highly realistic, simulated OSINT background check for this specific username.
@@ -59,24 +63,32 @@ export default async function handler(req, res) {
     }
 
     try {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+        const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Authorization': `Bearer ${apiKey}`,
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify({
-                systemInstruction: { parts: [{ text: systemPrompt }] },
-                contents: [{ parts: [{ text: `Analyze the username: ${data}` }] }]
+                model: "llama3-8b-8192", // Using Meta's Llama 3 model
+                messages: [
+                    { role: "system", content: systemPrompt },
+                    { role: "user", content: `Analyze the username: ${data}` }
+                ],
+                temperature: 0.7
             })
         });
 
         const apiData = await response.json();
         
-        // NEW ERROR CATCHER: If Google rejects the API key, show the exact reason on the screen!
+        // Error handling if the API key is wrong or Groq is down
         if (apiData.error) {
-            return res.status(200).json({ result: `> GOOGLE API ERROR: ${apiData.error.message}\n> Double check your API key in Vercel settings!` });
+            return res.status(200).json({ result: `> API ERROR: ${apiData.error.message}` });
         }
 
-        const generatedText = apiData.candidates[0].content.parts[0].text;
+        const generatedText = apiData.choices[0].message.content;
         res.status(200).json({ result: generatedText });
+
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Engine failure' });
