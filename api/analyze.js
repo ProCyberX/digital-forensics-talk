@@ -5,7 +5,7 @@ export default async function handler(req, res) {
     }
 
     const { type, data } = req.body; 
-    const apiKey = process.env.GEMINI_API_KEY;
+    const apiKey = process.env.GROQ_API_KEY;
 
     let systemPrompt = "";
 
